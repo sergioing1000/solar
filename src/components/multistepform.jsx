@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaGlobe } from "react-icons/fa";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 
+import NasaPower from "../assets/images/nasapower.jpeg";
 
 
 import "./multistepform.css";
@@ -25,6 +26,9 @@ const MultiStepForm = () => {
   const [errors, setErrors] = useState({});
   const [showMapModal, setShowMapModal] = useState(false);
   const [markerPosition, setMarkerPosition] = useState(null);
+  const [showRadiation, setShowRadiation] = useState(false);
+
+
 
   const LocationMarker = ({ setMarkerPosition, setFormData }) => {
     useMapEvents({
@@ -50,7 +54,7 @@ const MultiStepForm = () => {
         if (!formData.longitude) newErrors.longitude = "Longitude is required";
         break;
       case 2:
-        if (!formData.years) newErrors.years = "Please select a duration";
+        if (!formData.years) newErrors.years = "Please select an option for Historic data";
         break;
       case 3:
         if (!formData.batteryType)
@@ -59,18 +63,18 @@ const MultiStepForm = () => {
       case 4:
         if (!formData.autonomy) newErrors.autonomy = "Please select autonomy";
         if (formData.autonomy === "Other" && !formData.autonomyOther)
-          newErrors.autonomyOther = "Please input autonomy value";
+          newErrors.autonomyOther = "Please input autonomy value in hours...";
         break;
       case 5:
         if (!formData.panelType)
-          newErrors.panelType = "Please select panel type";
+          newErrors.panelType = "Please select Solar panel type";
         if (formData.panelType === "Other" && !formData.panelOther)
-          newErrors.panelOther = "Please input panel value";
+          newErrors.panelOther = "Please input panel value in Watts peak";
         break;
       case 6:
-        if (!formData.load1) newErrors.load1 = "Required";
-        if (!formData.load2) newErrors.load2 = "Required";
-        if (!formData.load3) newErrors.load3 = "Required";
+        if (!formData.load1) newErrors.load1 = "Please input Load 1 in Watts";
+        if (!formData.load2) newErrors.load2 = "Please input Load 2 in Watts";
+        if (!formData.load3) newErrors.load3 = "Please input Load 3 in Watts";
         break;
       default:
         break;
@@ -94,6 +98,7 @@ const MultiStepForm = () => {
     if (validateStep()) {
       alert(JSON.stringify(formData, null, 2));
     }
+
   };
 
   const renderStep = () => {
@@ -131,7 +136,12 @@ const MultiStepForm = () => {
 
         {step === 2 && (
           <div>
-            <label>Duration:</label>
+            <div>
+              <a target="_blank" href="https://power.larc.nasa.gov/">
+                <img src={NasaPower} alt="Nasa Power Logo" />
+              </a>
+            </div>
+            <label>Historic Data:</label>
             <select name="years" value={formData.years} onChange={handleChange}>
               <option value="">--Select--</option>
               <option value="1">One year</option>
@@ -144,7 +154,7 @@ const MultiStepForm = () => {
 
         {step === 3 && (
           <div>
-            <label>Battery Type:</label>
+            <label>Battery Type [Ah]</label>
             <select
               name="batteryType"
               value={formData.batteryType}
@@ -163,7 +173,7 @@ const MultiStepForm = () => {
 
         {step === 4 && (
           <div>
-            <label>Autonomy:</label>
+            <label>Autonomy [h]:</label>
             <select
               name="autonomy"
               value={formData.autonomy}
@@ -260,7 +270,7 @@ const MultiStepForm = () => {
 
   return (
     <div className="multi-step-form">
-      <h2>INPUNT DATA</h2>
+      <h2>INPUT DATA</h2>
       <div className="step-content fade-in">{renderStep()}</div>
       <div className="button-group">
         {step > 1 && step <= 6 && (
@@ -311,7 +321,7 @@ const MultiStepForm = () => {
               </MapContainer>
             </div>
             <button onClick={() => setShowMapModal(false)} className="btn">
-              Confirm
+              Continue
             </button>
           </div>
         </div>

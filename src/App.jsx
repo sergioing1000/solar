@@ -3,7 +3,6 @@ import viteLogo from '/vite.svg'
 
 
 import MultiStepForm from "../src/components/multistepform.jsx";
-import Radiation from "../src/components/radiation.jsx";
 import './App.css'
 
 function App() {
@@ -12,7 +11,6 @@ function App() {
     <>
       <div>
         <MultiStepForm />
-        <Radiation />
       </div>
 
       <div>
