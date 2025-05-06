@@ -24,7 +24,19 @@ ChartJS.register(
   Filler
 );
 
-const SolarData = () => {
+const SolarData = ({
+  latitude,
+  longitude,
+  years,
+  batteryType,
+  autonomy,
+  autonomyOther,
+  panelType,
+  panelOther,
+  load1,
+  load2,
+  load3,
+}) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -87,6 +99,8 @@ const SolarData = () => {
       Date: item.date,
       "Solar Radiation (kWh/m²/day)": item.value,
     }));
+
+    console.log(latitude);
 
     const worksheet = XLSX.utils.json_to_sheet(worksheetData);
     const workbook = XLSX.utils.book_new();

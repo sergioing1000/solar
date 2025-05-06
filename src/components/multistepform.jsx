@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FaGlobe } from "react-icons/fa";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 
+import Radiation from "../components/radiation.jsx";
+
 import NasaPower from "../assets/images/nasapower.jpeg";
 
 
@@ -97,6 +99,7 @@ const MultiStepForm = () => {
   const handleSend = () => {
     if (validateStep()) {
       alert(JSON.stringify(formData, null, 2));
+      setShowRadiation(true);
     }
 
   };
@@ -270,64 +273,71 @@ const MultiStepForm = () => {
 
   return (
     <div className="multi-step-form">
-      <h2>INPUT DATA</h2>
-      <div className="step-content fade-in">{renderStep()}</div>
-      <div className="button-group">
-        {step > 1 && step <= 6 && (
-          <button onClick={handleBack} className="btn back">
-            Back
-          </button>
-        )}
-        {step === 1 && (
-          <div className="btn_next1_container">
-            <button onClick={handleNext} className="btn next">
-              Next
-            </button>
+      {showRadiation ? (
+        <Radiation {...formData} />
+      ) : (
+        <>
+          <h2>INPUNT DATA</h2>
+          <div className="step-content fade-in">{renderStep()}</div>
+          <div className="button-group">
+            {step > 1 && step <= 6 && (
+              <button onClick={handleBack} className="btn back">
+                Back
+              </button>
+            )}
+            {step === 1 && (
+              <div className="btn_next1_container">
+                <button onClick={handleNext} className="btn next">
+                  Next
+                </button>
+              </div>
+            )}
+            {step > 1 && step < 6 && (
+              <button onClick={handleNext} className="btn next">
+                Next
+              </button>
+            )}
+            {step === 6 && (
+              <button onClick={handleSend} className="btn send">
+                Send
+              </button>
+            )}
           </div>
-        )}
-        {step > 1 && step < 6 && (
-          <button onClick={handleNext} className="btn next">
-            Next
-          </button>
-        )}
-        {step === 6 && (
-          <button onClick={handleSend} className="btn send">
-            Send
-          </button>
-        )}
-      </div>
 
-      {showMapModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Select Coordinates</h3>
-            <div
-              style={{ height: "300px", width: "100%", marginBottom: "1rem" }}
-            >
-              <MapContainer
-                center={[4, -72]}
-                zoom={4}
-                style={{ height: "100%", width: "100%" }}
-              >
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  // attribution="&copy; OpenStreetMap contributors"
-                />
-                <LocationMarker
-                  setMarkerPosition={setMarkerPosition}
-                  setFormData={setFormData}
-                />
-                {markerPosition && <Marker position={markerPosition} />}
-              </MapContainer>
+          {showMapModal && (
+            <div className="modal">
+              <div className="modal-content">
+                <h3>Select Coordinates</h3>
+                <div
+                  style={{
+                    height: "300px",
+                    width: "100%",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <MapContainer
+                    center={[4, -72]}
+                    zoom={4}
+                    style={{ height: "100%", width: "100%" }}
+                  >
+                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                    <LocationMarker
+                      setMarkerPosition={setMarkerPosition}
+                      setFormData={setFormData}
+                    />
+                    {markerPosition && <Marker position={markerPosition} />}
+                  </MapContainer>
+                </div>
+                <button onClick={() => setShowMapModal(false)} className="btn">
+                  Confirm
+                </button>
+              </div>
             </div>
-            <button onClick={() => setShowMapModal(false)} className="btn">
-              Continue
-            </button>
-          </div>
-        </div>
+          )}
+        </>
       )}
     </div>
-  );
+  );  
 };
 
 export default MultiStepForm;
