@@ -25,18 +25,19 @@ ChartJS.register(
 );
 
 const SolarData = ({
-  latitude,
-  longitude,
-  years,
-  batteryType,
-  autonomy,
-  autonomyOther,
-  panelType,
-  panelOther,
-  load1,
-  load2,
-  load3,
+  latitude_prop,
+  longitude_prop,
+  years_prop,
+  batteryType_prop,
+  autonomy_prop,
+  autonomyOther_prop,
+  panelType_prop,
+  panelOther_prop,
+  load1_prop,
+  load2_prop,
+  load3_prop,
 }) => {
+
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -46,10 +47,31 @@ const SolarData = ({
       redirect: "follow",
     };
 
-    fetch(
-      "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=ALLSKY_SFC_SW_DWN&community=RE&latitude=-33.46066574322186&longitude=-70.66912252976925&start=20220401&end=20250401&format=JSON",
-      requestOptions
-    )
+    // Define query parameters as variables
+    const baseUrl = "https://power.larc.nasa.gov/api/temporal/daily/point";
+    const parameters = "ALLSKY_SFC_SW_DWN";
+    const community = "RE";
+    const latitude = "4.12";
+    const longitude = "-72.54612";
+    const start = "20220401";
+    const end = "20250401";
+    const format = "JSON";
+
+    // Build query string
+    const queryParams = new URLSearchParams({
+      parameters,
+      community,
+      latitude: latitude.toString(),
+      longitude: longitude.toString(),
+      start,
+      end,
+      format,
+    });
+
+    // Build full URI
+    const uri = `${baseUrl}?${queryParams.toString()}`;
+
+    fetch(uri, requestOptions)
       .then((response) => response.json())
       .then((result) => setData(result.properties.parameter.ALLSKY_SFC_SW_DWN))
       .catch((error) => setError(error.message));
@@ -99,8 +121,6 @@ const SolarData = ({
       Date: item.date,
       "Solar Radiation (kWh/m²/day)": item.value,
     }));
-
-    console.log(latitude);
 
     const worksheet = XLSX.utils.json_to_sheet(worksheetData);
     const workbook = XLSX.utils.book_new();
@@ -156,9 +176,6 @@ const SolarData = ({
           <button onClick={exportToExcel} style={{ margin: "10px 0" }}>
             Export to Excel
           </button>
-          <table border="1" cellPadding="5">
-            ...
-          </table>
         </>
       )}
     </>

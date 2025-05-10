@@ -13,15 +13,15 @@ import "leaflet/dist/leaflet.css";
 const MultiStepForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    latitude: "",
-    longitude: "",
-    years: "",
-    batteryType: "",
-    autonomy: "",
+    latitude: "4",
+    longitude: "-72",
+    years: "One year",
+    batteryType: "411 (150Ah)",
+    autonomy: "18 hours",
     autonomyOther: "",
-    panelType: "",
+    panelType: "550 Wp",
     panelOther: "",
-    load1: "",
+    load1: "15000",
     load2: "0",
     load3: "0",
   });
@@ -307,7 +307,24 @@ const MultiStepForm = () => {
           {showMapModal && (
             <div className="modal">
               <div className="modal-content">
-                <h3>Select Coordinates</h3>
+                <div className="modal-close-button">
+                  <button
+                    onClick={() => setShowMapModal(false)}
+                    style={{
+                      position: "relative",
+                      background: "#00B0F0",
+                      border: "none",
+                      color: "#012146",
+                      cursor: "pointer",
+                      borderRadius: "20px",
+                    }}
+                    aria-label="Close"
+                  >
+                    X
+                  </button>
+                </div>
+
+                <h3>Select Site Location</h3>
                 <div
                   style={{
                     height: "300px",
@@ -318,7 +335,11 @@ const MultiStepForm = () => {
                   <MapContainer
                     center={[4, -72]}
                     zoom={4}
-                    style={{ height: "100%", width: "100%" }}
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      cursor: "crosshair",
+                    }}
                   >
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     <LocationMarker
